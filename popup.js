@@ -23,6 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
       listOfHighlights.forEach((h, index) => {
         let listItem = document.createElement('li')
         listItem.textContent = `- "${h.text}"`
+        let strippedUrl = url.replace(/[^a-zA-Z0-9]/g, '')
+        listItem.id = `${strippedUrl}-${index}`
 
         let deleteButton = document.createElement('button')
         deleteButton.textContent = 'Remove'
@@ -56,9 +58,10 @@ function removeHighlight(url, index) {
         delete highlights[url]
       }
 
-      // Save updated highlights back to storage
+      // Save updated highlights back to storage and dynamically remove element without reloading
       chrome.storage.sync.set({ highlights }, () => {
-        location.reload() // Refresh popup to reflect changes
+        let strippedUrl = url.replace(/[^a-zA-Z0-9]/g, '')
+        document.querySelector(`#${strippedUrl}-${index}`).remove()
       })
     }
   })
