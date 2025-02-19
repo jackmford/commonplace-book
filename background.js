@@ -2,7 +2,7 @@ chrome.runtime.onInstalled.addListener(() => {
   // Create a custom context menu item for selected text
   chrome.contextMenus.create({
     id: 'saveHighlight',
-    title: 'Save Highlight',
+    title: 'Save to Commonplace Book',
     contexts: ['selection'], // Only show when text is selected
   })
 })
