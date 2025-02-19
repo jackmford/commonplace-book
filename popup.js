@@ -22,7 +22,11 @@ document.addEventListener('DOMContentLoaded', () => {
       // Create a list item for each highlight
       listOfHighlights.forEach((h, index) => {
         let listItem = document.createElement('li')
-        listItem.textContent = `- "${h.text}"`
+        let textSpan = document.createElement('span')
+        textSpan.textContent = `- "${h.text}"`
+
+        //listItem.textContent = `- "${h.text}"`
+
         let strippedUrl = url.replace(/[^a-zA-Z0-9]/g, '')
         listItem.id = `${strippedUrl}-${index}`
 
@@ -33,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
           removeHighlight(url, index)
         }
 
+        listItem.appendChild(textSpan)
         listItem.appendChild(deleteButton)
         list.appendChild(listItem)
       })
@@ -60,8 +65,7 @@ function removeHighlight(url, index) {
 
       // Save updated highlights back to storage and dynamically remove element without reloading
       chrome.storage.sync.set({ highlights }, () => {
-        let strippedUrl = url.replace(/[^a-zA-Z0-9]/g, '')
-        document.querySelector(`#${strippedUrl}-${index}`).remove()
+        location.reload()
       })
     }
   })
@@ -90,3 +94,10 @@ document.getElementById("exportCSV").addEventListener("click", () => {
   });
 });
 
+document.getElementById("clearAll").addEventListener("click", () => {
+  if (confirm("Are you sure you want to delete all highlights?")) {
+    chrome.storage.sync.set({ highlights: {} }, () => {
+      document.getElementById("highlights").innerHTML = "<p>No highlights saved.</p>";
+    });
+  }
+});
