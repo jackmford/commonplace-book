@@ -1,11 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
   chrome.storage.sync.get('highlights', (data) => {
-    let highlights = data.highlights || []
+    let highlightsMap = data.highlights || []
     let container = document.getElementById('highlights')
     container.innerHTML = ''
 
-    for (let url in highlights) {
-      let highlight = highlights[url]
+    for (let url in highlightsMap) {
+      let listOfHighlights = highlightsMap[url]
       let section = document.createElement('div')
       let pageTitle = document.createElement('h3')
       let pageLink = document.createElement('a')
@@ -19,7 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       let list = document.createElement('ul')
 
-      highlight.forEach((h, index) => {
+      // Create a list item for each highlight
+      listOfHighlights.forEach((h, index) => {
         let listItem = document.createElement('li')
         listItem.textContent = `- "${h.text}"`
 
