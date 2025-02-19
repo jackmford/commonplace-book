@@ -66,3 +66,27 @@ function removeHighlight(url, index) {
     }
   })
 }
+
+document.getElementById("exportCSV").addEventListener("click", () => {
+  chrome.storage.sync.get("highlights", (data) => {
+    let highlights = data.highlights || {};
+    let csvContent = "data:text/csv;charset=utf-8,URL,Highlight,Timestamp\n";
+
+    for (let url in highlights) {
+      highlights[url].forEach(h => {
+        let timestamp = new Date(h.timestamp).toISOString();
+        csvContent += `"${url}","${h.text}","${timestamp}"\n`;
+      });
+    }
+
+    // Create a downloadable link
+    let encodedUri = encodeURI(csvContent);
+    let link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "highlights.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
+});
+
