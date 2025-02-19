@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let textSpan = document.createElement('span')
         textSpan.textContent = `- "${h.text}"`
 
-        //listItem.textContent = `- "${h.text}"`
 
         let strippedUrl = url.replace(/[^a-zA-Z0-9]/g, '')
         listItem.id = `${strippedUrl}-${index}`

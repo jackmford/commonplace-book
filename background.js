@@ -10,7 +10,6 @@ chrome.runtime.onInstalled.addListener(() => {
 // Handle context menu item click
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   if (info.menuItemId === 'saveHighlight') {
-    // The selected text
     const selectedText = info.selectionText
 
     // Send the selected text and URL to the background for saving
@@ -21,7 +20,6 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
       highlightMap.push({ text: selectedText, timestamp: Date.now() })
 
       highlights[tab.url] = highlightMap
-      //highlights.push({ text: message.text, url: message.url, timestamp: Date.now() });
 
       chrome.storage.sync.set({ highlights }, () => {
         console.log('Highlight saved:', selectedText)
