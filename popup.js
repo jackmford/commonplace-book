@@ -19,9 +19,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
       let list = document.createElement('ul')
 
-      highlight.forEach((h) => {
+      highlight.forEach((h, index) => {
         let listItem = document.createElement('li')
         listItem.textContent = `- "${h.text}"`
+
+        let deleteButton = document.createElement('button')
+        deleteButton.textContent = 'Remove'
+        deleteButton.style.marginLeft = '10px'
+        deleteButton.onclick = function() {
+          removeHighlight(url, index)
+        }
+
+        listItem.appendChild(deleteButton)
         list.appendChild(listItem)
       })
 
@@ -30,3 +39,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })
 })
+
+// Function to remove a highlight
+function removeHighlight(url, index) {
+  chrome.storage.sync.get('highlights', (result) => {
+    let highlights = result.highlights
+    let urlHighlights = highlights[url] || []
+
+    if (index >= 0 && index < urlHighlights.length) {
+      urlHighlights.splice(index, 1)
+      highlights[url] = urlHighlights
+
+      // If the URL has no highlights remove it from map
+      if (urlHighlights.length == 0) {
+        delete highlights[url]
+      }
+
+      // Save updated highlights back to storage
+      chrome.storage.sync.set({ highlights }, () => {
+        location.reload() // Refresh popup to reflect changes
+      })
+    }
+  })
+}
