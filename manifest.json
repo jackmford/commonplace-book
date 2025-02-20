@@ -1,23 +1,20 @@
 {
   "manifest_version": 3,
   "name": "Commonplace Book",
-  "version": "1.0",
-  "description": "Highlight and save text from web pages",
+  "version": "1.0.0",
+  "description": "Highlight and save text from web pages.",
   "permissions": ["storage", "activeTab", "contextMenus"],
-  "host_permissions": ["<all_urls>"],
   "background": {
     "service_worker": "src/background.js"
   },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["src/content.js"],
-      "run_at": "document_idle"
+      "js": ["src/content.js"]
     }
   ],
   "action": {
-    "default_popup": "src/popup.html",
-    "default_icon": {}
+    "default_popup": "src/popup.html"
   },
   "icons": {
     "16": "icons/icon16.png",
