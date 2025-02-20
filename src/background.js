@@ -13,7 +13,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     const selectedText = info.selectionText
 
     // Send the selected text and URL to the background for saving
-    chrome.storage.sync.get('highlights', (data) => {
+    chrome.storage.local.get('highlights', (data) => {
       let highlights = data.highlights || {}
       let highlightMap = highlights[tab.url] || []
 
@@ -21,7 +21,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 
       highlights[tab.url] = highlightMap
 
-      chrome.storage.sync.set({ highlights }, () => {
+      chrome.storage.local.set({ highlights }, () => {
         console.log('Highlight saved:', selectedText)
       })
     })

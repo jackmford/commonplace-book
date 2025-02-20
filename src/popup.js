@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  chrome.storage.sync.get('highlights', (data) => {
+  chrome.storage.local.get('highlights', (data) => {
     let highlightsMap = data.highlights || []
     let container = document.getElementById('highlights')
     container.innerHTML = ''
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Function to remove a highlight
 function removeHighlight(url, index) {
-  chrome.storage.sync.get('highlights', (result) => {
+  chrome.storage.local.get('highlights', (result) => {
     let highlights = result.highlights
     let urlHighlights = highlights[url] || []
 
@@ -63,7 +63,7 @@ function removeHighlight(url, index) {
       }
 
       // Save updated highlights back to storage and dynamically remove element without reloading
-      chrome.storage.sync.set({ highlights }, () => {
+      chrome.storage.local.set({ highlights }, () => {
         location.reload()
       })
     }
@@ -71,7 +71,7 @@ function removeHighlight(url, index) {
 }
 
 document.getElementById("exportCSV").addEventListener("click", () => {
-  chrome.storage.sync.get("highlights", (data) => {
+  chrome.storage.local.get("highlights", (data) => {
     let highlights = data.highlights || {};
     let csvContent = "data:text/csv;charset=utf-8,URL,Highlight,Timestamp\n";
 
@@ -95,7 +95,7 @@ document.getElementById("exportCSV").addEventListener("click", () => {
 
 document.getElementById("clearAll").addEventListener("click", () => {
   if (confirm("Are you sure you want to delete all highlights?")) {
-    chrome.storage.sync.set({ highlights: {} }, () => {
+    chrome.storage.local.set({ highlights: {} }, () => {
       document.getElementById("highlights").innerHTML = "<p>No highlights saved.</p>";
     });
   }
