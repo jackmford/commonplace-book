@@ -42,7 +42,7 @@ highlights conveniently.
 2. **Background Script (`background.js`)**:
 
    - Listens for right-click events on selected text.
-   - Stores highlights in Chrome Sync storage.
+   - Stores highlights in Chrome Local storage.
    - Handles export logic.
 
 3. **Popup (`popup.html`, `popup.js`)**:
@@ -52,7 +52,7 @@ highlights conveniently.
    - Includes buttons for CSV export and clearing highlights.
 
 4. **Storage**:
-   - Uses `chrome.storage.sync` to persist highlights, allowing access across Chrome sessions.
+   - Uses `chrome.storage.local` to persist highlights, allowing access across Chrome sessions.
 
 ## Installation
 
