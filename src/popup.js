@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
         listItem.id = `${strippedUrl}-${index}`
 
         let deleteButton = document.createElement('button')
+        deleteButton.classList.add('remove')
         deleteButton.textContent = 'Remove'
         deleteButton.onclick = function() {
           removeHighlight(url, index)
@@ -50,16 +51,13 @@ document.addEventListener('DOMContentLoaded', () => {
       pageLink.target = '_blank'
 
       toggleButton.textContent = collapsedSections[url] ? 'Expand' : 'Collapse'
-      toggleButton.className = 'toggle'
+      toggleButton.classList.add('toggle')
       toggleButton.addEventListener('click', () => {
         toggleSection(url, list, toggleButton)
 
       })
 
-      header.style.display = 'flex'
-      header.style.alignItems = 'center'
-      header.style.justifyContent = 'space-between'
-      header.style.paddingRight= '10px'
+      header.classList.add('urlHeader')
 
       header.appendChild(pageTitle)
       header.appendChild(toggleButton)

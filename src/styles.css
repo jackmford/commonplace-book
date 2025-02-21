@@ -41,7 +41,7 @@ li {
 }
 
 /* Remove Button */
-button {
+button.remove {
   background-color: #e76f51; /* Soft red */
   color: white;
   border: none;
@@ -52,7 +52,7 @@ button {
   transition: background 0.2s ease;
 }
 
-button:hover {
+button.remove:hover {
   background-color: #f4a261; /* Lighter pastel red */
 }
 
@@ -74,4 +74,37 @@ button:hover {
 #exportCSV:hover, #clearAll:hover {
   background-color: #8ecae6; /* Softer pastel teal */
 }
+
+/* Section Header */
+h3 {
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: #457b9d; /* Soft blue */
+  display: inline-block;
+}
+
+/* Toggle Button */
+button.toggle {
+  width: 75px;  /* Set a fixed width */
+  text-align: center;
+  background: #a8dadc;
+  border: none;
+  padding: 5px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: background 1s ease;
+}
+
+button.toggle:hover {
+  background: #8ecae6;
+}
+
+div.urlHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 10px;
+}
+
 
