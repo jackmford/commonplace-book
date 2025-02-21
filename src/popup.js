@@ -1,23 +1,22 @@
 document.addEventListener('DOMContentLoaded', () => {
-  chrome.storage.local.get('highlights', (data) => {
+  chrome.storage.local.get(['highlights', 'collapsedSections'], (data) => {
     let highlightsMap = data.highlights || []
+    let collapsedSections = data.collapsedSections || {}
     let container = document.getElementById('highlights')
     container.innerHTML = ''
 
     for (let url in highlightsMap) {
       let listOfHighlights = highlightsMap[url]
+
       let section = document.createElement('div')
+      let header = document.createElement('div')
       let pageTitle = document.createElement('h3')
       let pageLink = document.createElement('a')
-
-      pageLink.href = url
-      pageLink.textContent = url
-      pageLink.target = '_blank'
-
-      pageTitle.appendChild(pageLink)
-      section.appendChild(pageTitle)
+      let toggleButton = document.createElement('button')
 
       let list = document.createElement('ul')
+      list.style.display = collapsedSections[url] ? 'none' : 'block'
+
 
       // Create a list item for each highlight
       listOfHighlights.forEach((h, index) => {
@@ -31,7 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let deleteButton = document.createElement('button')
         deleteButton.textContent = 'Remove'
-        deleteButton.style.marginLeft = '10px'
         deleteButton.onclick = function() {
           removeHighlight(url, index)
         }
@@ -41,11 +39,52 @@ document.addEventListener('DOMContentLoaded', () => {
         list.appendChild(listItem)
       })
 
+      pageLink.href = url
+      pageLink.textContent = url
+      pageLink.target = '_blank'
+
+      toggleButton.textContent = collapsedSections[url] ? 'Expand' : 'Collapse'
+      toggleButton.className = 'toggle'
+      toggleButton.addEventListener('click', () => {
+        toggleSection(url, list, toggleButton)
+
+      })
+
+      header.style.display = 'flex'
+      header.style.alignItems = 'center'
+      header.style.justifyContent = 'space-between'
+      header.style.paddingRight= '10px'
+
+      header.appendChild(pageTitle)
+      header.appendChild(toggleButton)
+      pageTitle.appendChild(pageLink)
+      section.appendChild(header)
+
       section.appendChild(list)
       container.appendChild(section)
     }
   })
 })
+
+function toggleSection(url, list, buttonElement) {
+  chrome.storage.local.get('collapsedSections', (data) => {
+    let collapsedSections = data.collapsedSections || {}
+    isCollapsed = collapsedSections[url]
+
+    if (isCollapsed == true) {
+      list.style.display = 'block'
+      buttonElement.textContent = 'Collapse'
+      collapsedSections[url] = false
+    } else {
+      list.style.display = 'none'
+      buttonElement.textContent = 'Expand'
+      collapsedSections[url] = true
+    }
+
+    chrome.storage.local.set({ collapsedSections }) // save
+
+  })
+}
 
 // Function to remove a highlight
 function removeHighlight(url, index) {
