@@ -47,8 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
       })
 
       pageLink.href = url
-      pageLink.textContent = url
+      pageLink.textContent = url.slice(0, 30)
       pageLink.target = '_blank'
+      pageLink.title = url;
 
       toggleButton.textContent = collapsedSections[url] ? 'Expand' : 'Collapse'
       toggleButton.classList.add('toggle')
