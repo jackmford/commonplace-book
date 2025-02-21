@@ -1,9 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
   chrome.storage.local.get(['highlights', 'collapsedSections'], (data) => {
-    let highlightsMap = data.highlights || []
+    let highlightsMap = data.highlights || {}
     let collapsedSections = data.collapsedSections || {}
     let container = document.getElementById('highlights')
     container.innerHTML = ''
+
+    console.log(highlightsMap.length)
+    if (Object.keys(highlightsMap).length == 0) {
+        document.getElementById("highlights").innerHTML = "<p>No highlights saved.</p>";
+        return
+    }
 
     for (let url in highlightsMap) {
       let listOfHighlights = highlightsMap[url]
@@ -100,6 +106,7 @@ function removeHighlight(url, index) {
       if (urlHighlights.length == 0) {
         delete highlights[url]
       }
+
 
       // Save updated highlights back to storage and dynamically remove element without reloading
       chrome.storage.local.set({ highlights }, () => {
