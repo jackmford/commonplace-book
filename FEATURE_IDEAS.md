@@ -1,3 +1,4 @@
 - [ ] markdown dump
 - [ ] remove whole URL button
 - [ ] email distribution of saves
+- [ ] save to notion
