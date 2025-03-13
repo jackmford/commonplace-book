@@ -115,10 +115,48 @@ function removeHighlight(url, index) {
   })
 }
 
+// Function to show custom alert
+function showCustomAlert(message) {
+  const alertElement = document.getElementById('customAlert');
+  const messageElement = document.getElementById('alertMessage');
+  messageElement.textContent = message;
+  alertElement.style.display = 'flex';
+  
+  // Handle OK button click
+  document.getElementById('alertOk').onclick = () => {
+    alertElement.style.display = 'none';
+  };
+}
+
+// Function to show custom confirmation dialog
+function showCustomConfirm(message, onConfirm) {
+  const confirmElement = document.getElementById('customConfirm');
+  const messageElement = document.getElementById('confirmMessage');
+  messageElement.textContent = message;
+  confirmElement.style.display = 'flex';
+  
+  // Handle OK button click
+  document.getElementById('confirmOk').onclick = () => {
+    confirmElement.style.display = 'none';
+    onConfirm();
+  };
+  
+  // Handle Cancel button click
+  document.getElementById('confirmCancel').onclick = () => {
+    confirmElement.style.display = 'none';
+  };
+}
+
 // Function to export highlights as CSV
 document.getElementById("exportCSV").addEventListener("click", () => {
   chrome.storage.local.get("highlights", (data) => {
     let highlights = data.highlights || {};
+    
+    if (Object.keys(highlights).length === 0) {
+      showCustomAlert("No highlights to export. Add some highlights first!");
+      return;
+    }
+
     let csvContent = "data:text/csv;charset=utf-8,URL,Highlight,Timestamp\n";
 
     for (let url in highlights) {
@@ -143,6 +181,12 @@ document.getElementById("exportCSV").addEventListener("click", () => {
 document.getElementById("exportMarkdown").addEventListener("click", () => {
   chrome.storage.local.get("highlights", (data) => {
     let highlights = data.highlights || {};
+    
+    if (Object.keys(highlights).length === 0) {
+      showCustomAlert("No highlights to export. Add some highlights first!");
+      return;
+    }
+
     let markdownContent = "# Commonplace Book Highlights\n\n";
 
     for (let url in highlights) {
@@ -169,9 +213,9 @@ document.getElementById("exportMarkdown").addEventListener("click", () => {
 });
 
 document.getElementById("clearAll").addEventListener("click", () => {
-  if (confirm("Are you sure you want to delete all highlights?")) {
+  showCustomConfirm("Are you sure you want to delete all highlights?", () => {
     chrome.storage.local.set({ highlights: {} }, () => {
       document.getElementById("highlights").innerHTML = "<p>No highlights saved.</p>";
     });
-  }
+  });
 });
