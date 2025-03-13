@@ -115,6 +115,7 @@ function removeHighlight(url, index) {
   })
 }
 
+// Function to export highlights as CSV
 document.getElementById("exportCSV").addEventListener("click", () => {
   chrome.storage.local.get("highlights", (data) => {
     let highlights = data.highlights || {};
@@ -135,6 +136,35 @@ document.getElementById("exportCSV").addEventListener("click", () => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  });
+});
+
+// Function to export highlights as Markdown
+document.getElementById("exportMarkdown").addEventListener("click", () => {
+  chrome.storage.local.get("highlights", (data) => {
+    let highlights = data.highlights || {};
+    let markdownContent = "# Commonplace Book Highlights\n\n";
+
+    for (let url in highlights) {
+      markdownContent += `## ${url}\n\n`;
+      highlights[url].forEach(h => {
+        let timestamp = new Date(h.timestamp).toLocaleString();
+        markdownContent += `> ${h.text}\n\n`;
+        markdownContent += `*Captured on: ${timestamp}*\n\n`;
+      });
+      markdownContent += "---\n\n";
+    }
+
+    // Create a downloadable link
+    let blob = new Blob([markdownContent], { type: 'text/markdown' });
+    let url = URL.createObjectURL(blob);
+    let link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "highlights.md");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   });
 });
 
