@@ -187,7 +187,7 @@ document.getElementById("exportMarkdown").addEventListener("click", () => {
       return;
     }
 
-    let markdownContent = "# Commonplace Book Highlights\n\n";
+    let markdownContent = "";
 
     for (let url in highlights) {
       markdownContent += `## ${url}\n\n`;
