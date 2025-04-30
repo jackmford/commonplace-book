@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let container = document.getElementById('highlights')
     container.innerHTML = ''
 
-    console.log(highlightsMap.length)
     if (Object.keys(highlightsMap).length == 0) {
         document.getElementById("highlights").innerHTML = "<p>No highlights saved.</p>";
         return
@@ -46,10 +45,11 @@ document.addEventListener('DOMContentLoaded', () => {
         list.appendChild(listItem)
       })
 
-      pageLink.href = url
-      pageLink.textContent = url.slice(0, 30)
+      const parsedUrl = JSON.parse(url)
+      pageLink.href = parsedUrl[1]
+      pageLink.textContent = parsedUrl[0].slice(0, 30)
       pageLink.target = '_blank'
-      pageLink.title = url;
+      pageLink.title = parsedUrl[0];
 
       toggleButton.textContent = collapsedSections[url] ? 'Expand' : 'Collapse'
       toggleButton.classList.add('toggle')
@@ -157,12 +157,13 @@ document.getElementById("exportCSV").addEventListener("click", () => {
       return;
     }
 
-    let csvContent = "data:text/csv;charset=utf-8,URL,Highlight,Timestamp\n";
+    let csvContent = "data:text/csv;charset=utf-8,Title,URL,Highlight,Timestamp\n";
 
     for (let url in highlights) {
       highlights[url].forEach(h => {
+        const parsedUrl = JSON.parse(url);
         let timestamp = new Date(h.timestamp).toISOString();
-        csvContent += `"${url}","${h.text}","${timestamp}"\n`;
+        csvContent += `"${parsedUrl[0]}","${parsedUrl[1]}","${h.text}","${timestamp}"\n`;
       });
     }
 
@@ -190,7 +191,8 @@ document.getElementById("exportMarkdown").addEventListener("click", () => {
     let markdownContent = "";
 
     for (let url in highlights) {
-      markdownContent += `## ${url}\n\n`;
+      const parsedUrl = JSON.parse(url);
+      markdownContent += `## [${parsedUrl[0]}](${parsedUrl[1]})\n\n`;
       highlights[url].forEach(h => {
         let timestamp = new Date(h.timestamp).toLocaleString();
         markdownContent += `> ${h.text}\n\n`;

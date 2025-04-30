@@ -15,11 +15,16 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     // Send the selected text and URL to the background for saving
     chrome.storage.local.get('highlights', (data) => {
       let highlights = data.highlights || {}
-      let highlightMap = highlights[tab.url] || []
+
+      // mapKey is a two item array stringified to use as a key
+      // so it can be parsed in popup.js to retrieve both the tab.title and tab.url
+      // for the set of highlights
+      const mapKey = JSON.stringify([tab.title, tab.url])
+      let highlightMap = highlights[mapKey] || []
 
       highlightMap.push({ text: selectedText, timestamp: Date.now() })
 
-      highlights[tab.url] = highlightMap
+      highlights[mapKey] = highlightMap
 
       chrome.storage.local.set({ highlights }, () => {
         console.log('Highlight saved:', selectedText)
