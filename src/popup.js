@@ -162,7 +162,7 @@ document.getElementById("exportCSV").addEventListener("click", () => {
     for (let url in highlights) {
       highlights[url].forEach(h => {
         const parsedUrl = JSON.parse(url);
-        let timestamp = new Date(h.timestamp).toISOString();
+        let timestamp = new Date(h.timestamp).toLocaleString();
         csvContent += `"${parsedUrl[0]}","${parsedUrl[1]}","${h.text}","${timestamp}"\n`;
       });
     }
@@ -170,8 +170,9 @@ document.getElementById("exportCSV").addEventListener("click", () => {
     // Create a downloadable link
     let encodedUri = encodeURI(csvContent);
     let link = document.createElement("a");
+    let fileTimestamp = new Date().toLocaleDateString('en-CA');
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "highlights.csv");
+    link.setAttribute("download", `highlights_${fileTimestamp}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -205,8 +206,9 @@ document.getElementById("exportMarkdown").addEventListener("click", () => {
     let blob = new Blob([markdownContent], { type: 'text/markdown' });
     let url = URL.createObjectURL(blob);
     let link = document.createElement("a");
+    let fileTimestamp = new Date().toLocaleDateString('en-CA');
     link.setAttribute("href", url);
-    link.setAttribute("download", "highlights.md");
+    link.setAttribute("download", `highlights_${fileTimestamp}.md`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
